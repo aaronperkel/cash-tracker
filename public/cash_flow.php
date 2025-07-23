@@ -24,40 +24,49 @@ $charges = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </header>
 
     <div class="container">
-        <div class="cash-flow">
-            <?php
-            $aaron_owes = 0;
-            $riley_owes = 0;
+        <?php
+        $aaron_owes = 0;
+        $riley_owes = 0;
 
-            foreach ($charges as $charge) {
-                if ($charge['settled'] == 0) {
-                    $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
-                    if ($charge['payer'] == 'Aaron') {
-                        $riley_owes += $owed_amount;
-                    } else {
-                        $aaron_owes += $owed_amount;
-                    }
+        foreach ($charges as $charge) {
+            if ($charge['settled'] == 0) {
+                $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
+                if ($charge['payer'] == 'Aaron') {
+                    $riley_owes += $owed_amount;
+                } else {
+                    $aaron_owes += $owed_amount;
                 }
             }
+        }
 
-            $total = $riley_owes - $aaron_owes;
-            ?>
-
-            <h2>Aaron</h2>
-            <?php if ($total < 0): ?>
-                <div class="arrow red">&darr; $<?php echo number_format(abs($total), 2); ?> &darr;</div>
-            <?php else: ?>
-                <div class="arrow green">&uarr; $<?php echo number_format(abs($total), 2); ?> &uarr;</div>
-            <?php endif; ?>
-            <h2>Riley</h2>
+        $total = $riley_owes - $aaron_owes;
+        ?>
+        <div class="cash-flow">
+            <div class="cash-flow-person">
+                <h2>Aaron</h2>
+            </div>
+            <div class="cash-flow-arrow">
+                <?php if ($total < 0): ?>
+                    <span class="red">&larr; $<?php echo number_format(abs($total), 2); ?> &larr;</span>
+                <?php elseif ($total > 0): ?>
+                    <span class="green">&rarr; $<?php echo number_format(abs($total), 2); ?> &rarr;</span>
+                <?php else: ?>
+                    <span>&#8644; All settled up! &#8644;</span>
+                <?php endif; ?>
+            </div>
+            <div class="cash-flow-person">
+                <h2>Riley</h2>
+            </div>
         </div>
 
         <ul class="charge-list">
             <?php foreach ($charges as $charge): ?>
-                <li class="<?php echo $charge['settled'] ? 'settled' : ''; ?>">
-                    <span><?php echo htmlspecialchars($charge['description']); ?></span>
-                    <span><?php echo htmlspecialchars($charge['payer']); ?>: $<?php echo number_format($charge['amount'], 2); ?> (<?php echo number_format($charge['percentage'], 0); ?>%)</span>
-                </li>
+                <?php if ($charge['settled'] == 0): ?>
+                    <li>
+                        <span><?php echo htmlspecialchars($charge['description']); ?></span>
+                        <span><?php echo htmlspecialchars($charge['payer']); ?>: $<?php echo number_format($charge['amount'], 2); ?> (<?php echo number_format($charge['percentage'], 0); ?>%)</span>
+                    </li>
+                <?php endif; ?>
             <?php endforeach; ?>
         </ul>
     </div>
