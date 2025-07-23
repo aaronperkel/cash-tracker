@@ -5,11 +5,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $payer = $_POST['payer'];
     $amount = $_POST['amount'];
     $description = $_POST['description'];
+    $percentage = $_POST['percentage'];
 
-    $sql = "INSERT INTO charges (payer, amount, description) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO charges (payer, amount, description, percentage) VALUES (?, ?, ?, ?)";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
-        mysqli_stmt_bind_param($stmt, "sds", $payer, $amount, $description);
+        mysqli_stmt_bind_param($stmt, "sdsd", $payer, $amount, $description, $percentage);
 
         if (mysqli_stmt_execute($stmt)) {
             header("location: index.php");

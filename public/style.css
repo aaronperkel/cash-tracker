@@ -68,6 +68,11 @@ header {
     border-bottom: 1px solid #ddd;
 }
 
+.charge-list li.settled {
+    color: #999;
+    text-decoration: line-through;
+}
+
 .settle-up {
     text-align: center;
     margin-top: 2rem;
