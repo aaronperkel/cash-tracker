@@ -33,6 +33,11 @@ $total = $riley_owes - $aaron_owes;
 <body>
     <header>
         <h1>Expense Tracker</h1>
+        <nav>
+            <a href="index.php">Home</a>
+            <a href="cash_flow.php">Cash Flow</a>
+            <a href="admin.php">Admin</a>
+        </nav>
     </header>
 
     <div class="container">

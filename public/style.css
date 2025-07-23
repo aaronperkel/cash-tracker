@@ -1,20 +1,39 @@
 body {
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: #1a1a2e;
+    color: #e94560;
 }
 
 .container {
     width: 90%;
     margin: auto;
-    max-width: 600px;
+    max-width: 800px;
 }
 
 header {
-    background: #333;
-    color: #fff;
+    background: #16213e;
     padding: 1rem 0;
     text-align: center;
+    border-bottom: 2px solid #0f3460;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+nav a {
+    color: #e94560;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #fcfcfc;
 }
 
 .balance {
@@ -25,35 +44,37 @@ header {
 .balance h2 {
     margin: 0;
     font-size: 2.5rem;
+    color: #fcfcfc;
 }
 
 .charges {
-    background: #fff;
-    padding: 1rem;
-    border-radius: 5px;
-}
-
-.charge-form {
-    margin-bottom: 2rem;
+    background: #16213e;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .charge-form input,
-.charge-form select {
+.charge-form select,
+.charge-form button {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid #ddd;
+    border: 1px solid #0f3460;
+    background-color: #1a1a2e;
+    color: #fcfcfc;
+    font-size: 1rem;
 }
 
 .charge-form button {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background: #333;
-    color: #fff;
-    border-radius: 5px;
+    background: #e94560;
     cursor: pointer;
+    transition: background 0.3s;
+}
+
+.charge-form button:hover {
+    background: #c43d54;
 }
 
 .charge-list {
@@ -64,12 +85,14 @@ header {
 .charge-list li {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #0f3460;
+    color: #fcfcfc;
 }
 
 .charge-list li.settled {
-    color: #999;
+    color: #5a6a8a;
     text-decoration: line-through;
 }
 
@@ -79,9 +102,52 @@ header {
 }
 
 .settle-up a {
-    background: #f00;
+    background: #e94560;
     color: #fff;
-    padding: 10px 20px;
+    padding: 15px 30px;
     text-decoration: none;
     border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.settle-up a:hover {
+    background: #c43d54;
+}
+
+.cash-flow {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.cash-flow .arrow {
+    font-size: 3rem;
+}
+
+.cash-flow .red {
+    color: #e94560;
+}
+
+.cash-flow .green {
+    color: #2ecc71;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #0f3460;
+}
+
+.admin-table th {
+    background-color: #0f3460;
+}
+
+.admin-table a {
+    color: #e94560;
+    text-decoration: none;
 }
