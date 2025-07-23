@@ -1,0 +1,7 @@
+CREATE TABLE charges (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    payer VARCHAR(255) NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    charge_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
