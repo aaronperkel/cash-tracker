@@ -52,13 +52,17 @@ mysqli_close($link);
         <div class="charges">
             <div class="charge-form">
                 <form action="edit_charge.php?id=<?php echo $id; ?>" method="post">
+                    <label for="payer">Payer</label>
                     <select name="payer" required>
                         <option value="Aaron" <?php echo $charge['payer'] == 'Aaron' ? 'selected' : ''; ?>>Aaron</option>
                         <option value="Riley" <?php echo $charge['payer'] == 'Riley' ? 'selected' : ''; ?>>Riley</option>
                     </select>
-                    <input type="number" name="amount" step="0.01" placeholder="Amount" value="<?php echo $charge['amount']; ?>" required>
-                    <input type="number" name="percentage" step="0.01" placeholder="Percentage" value="<?php echo $charge['percentage']; ?>" required>
-                    <input type="text" name="description" placeholder="Description" value="<?php echo $charge['description']; ?>" required>
+                    <label for="amount">Amount</label>
+                    <input type="number" name="amount" step="0.01" value="<?php echo $charge['amount']; ?>" required>
+                    <label for="percentage">Percentage</label>
+                    <input type="number" name="percentage" step="0.01" value="<?php echo $charge['percentage']; ?>" required>
+                    <label for="description">Description</label>
+                    <input type="text" name="description" value="<?php echo htmlspecialchars($charge['description']); ?>" required>
                     <button type="submit">Update Charge</button>
                 </form>
             </div>

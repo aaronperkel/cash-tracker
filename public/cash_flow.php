@@ -24,51 +24,63 @@ $charges = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </header>
 
     <div class="container">
-        <?php
-        $aaron_owes = 0;
-        $riley_owes = 0;
-
-        foreach ($charges as $charge) {
-            if ($charge['settled'] == 0) {
-                $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
-                if ($charge['payer'] == 'Aaron') {
-                    $riley_owes += $owed_amount;
-                } else {
-                    $aaron_owes += $owed_amount;
-                }
-            }
-        }
-
-        $total = $riley_owes - $aaron_owes;
-        ?>
-        <div class="cash-flow">
-            <div class="cash-flow-person">
-                <h2>Aaron</h2>
-            </div>
-            <div class="cash-flow-arrow">
-                <?php if ($total < 0): ?>
-                    <span class="red">&larr; $<?php echo number_format(abs($total), 2); ?> &larr;</span>
-                <?php elseif ($total > 0): ?>
-                    <span class="green">&rarr; $<?php echo number_format(abs($total), 2); ?> &rarr;</span>
-                <?php else: ?>
-                    <span>&#8644; All settled up! &#8644;</span>
-                <?php endif; ?>
-            </div>
-            <div class="cash-flow-person">
-                <h2>Riley</h2>
-            </div>
-        </div>
-
-        <ul class="charge-list">
-            <?php foreach ($charges as $charge): ?>
-                <?php if ($charge['settled'] == 0): ?>
-                    <li>
-                        <span><?php echo htmlspecialchars($charge['description']); ?></span>
-                        <span><?php echo htmlspecialchars($charge['payer']); ?>: $<?php echo number_format($charge['amount'], 2); ?> (<?php echo number_format($charge['percentage'], 0); ?>%)</span>
-                    </li>
-                <?php endif; ?>
-            <?php endforeach; ?>
-        </ul>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Aaron</th>
+                    <th>Riley</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $aaron_balance = 0;
+                $riley_balance = 0;
+                foreach ($charges as $charge):
+                    if ($charge['settled'] == 0) {
+                        $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
+                        if ($charge['payer'] == 'Aaron') {
+                            $aaron_balance += $charge['amount'] - $owed_amount;
+                            $riley_balance -= $owed_amount;
+                        } else {
+                            $riley_balance += $charge['amount'] - $owed_amount;
+                            $aaron_balance -= $owed_amount;
+                        }
+                    }
+                ?>
+                    <tr>
+                        <td><?php echo date('Y-m-d', strtotime($charge['charge_date'])); ?></td>
+                        <td><?php echo htmlspecialchars($charge['description']); ?></td>
+                        <td class="<?php echo ($charge['payer'] == 'Aaron') ? 'green' : 'red'; ?>">
+                            <?php
+                            if ($charge['payer'] == 'Aaron') {
+                                echo '$' . number_format($charge['amount'], 2);
+                            } else {
+                                echo '-$' . number_format($charge['amount'] * ($charge['percentage'] / 100), 2);
+                            }
+                            ?>
+                        </td>
+                        <td class="<?php echo ($charge['payer'] == 'Riley') ? 'green' : 'red'; ?>">
+                            <?php
+                            if ($charge['payer'] == 'Riley') {
+                                echo '$' . number_format($charge['amount'], 2);
+                            } else {
+                                echo '-$' . number_format($charge['amount'] * ($charge['percentage'] / 100), 2);
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2">Total</th>
+                    <th class="<?php echo ($aaron_balance >= 0) ? 'green' : 'red'; ?>">$<?php echo number_format($aaron_balance, 2); ?></th>
+                    <th class="<?php echo ($riley_balance >= 0) ? 'green' : 'red'; ?>">$<?php echo number_format($riley_balance, 2); ?></th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
 </body>
 </html>

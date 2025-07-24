@@ -54,15 +54,18 @@ $total = $riley_owes - $aaron_owes;
         <div class="charges">
             <div class="charge-form">
                 <form action="add_charge.php" method="post">
+                    <label for="payer">Who paid?</label>
                     <select name="payer" id="payer" required>
-                        <option value="">Who paid?</option>
                         <option value="Aaron">Aaron</option>
                         <option value="Riley">Riley</option>
                     </select>
-                    <input type="number" name="amount" id="amount" step="0.01" placeholder="Amount" required>
-                    <input type="number" name="percentage" id="percentage" step="0.01" placeholder="Percentage (default: 50)" value="50">
+                    <label for="amount">Amount</label>
+                    <input type="number" name="amount" id="amount" step="0.01" required>
+                    <label for="percentage">Percentage Owed by Other Person</label>
+                    <input type="number" name="percentage" id="percentage" step="0.01" value="50" required>
                     <p>Owed: $<span id="owed-amount">0.00</span></p>
-                    <input type="text" name="description" placeholder="Description" required>
+                    <label for="description">Description</label>
+                    <input type="text" name="description" required>
                     <button type="submit">Add Charge</button>
                 </form>
             </div>
