@@ -40,30 +40,6 @@ foreach ($transactions as $transaction) {
                 <h2>All settled up!</h2>
             <?php endif; ?>
         </div>
-?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Expense Tracker</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-    <header>
-        <h1>Expense Tracker</h1>
-    </header>
-
-    <div class="container">
-        <div class="balance">
-            <?php if ($total > 0): ?>
-                <h2>Aaron owes Riley $<?php echo number_format(abs($total), 2); ?></h2>
-            <?php elseif ($total < 0): ?>
-                <h2>Riley owes Aaron $<?php echo number_format(abs($total), 2); ?></h2>
-            <?php else: ?>
-                <h2>All settled up!</h2>
-            <?php endif; ?>
-        </div>
 
         <div class="transaction-form">
             <form action="add_transaction.php" method="post">
