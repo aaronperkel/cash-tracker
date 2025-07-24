@@ -38,51 +38,39 @@ $charges = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 $aaron_balance = 0;
                 $riley_balance = 0;
                 foreach ($charges as $charge):
+                    $aaron_transaction = 0;
+                    $riley_transaction = 0;
                     if ($charge['settled'] == 0) {
                         if ($charge['paid_for'] == 'Both') {
                             $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
                             if ($charge['payer'] == 'Aaron') {
-                                $aaron_balance += $charge['amount'] - $owed_amount;
-                                $riley_balance -= $owed_amount;
+                                $aaron_transaction = $charge['amount'] - $owed_amount;
+                                $riley_transaction = -$owed_amount;
                             } else {
-                                $riley_balance += $charge['amount'] - $owed_amount;
-                                $aaron_balance -= $owed_amount;
+                                $riley_transaction = $charge['amount'] - $owed_amount;
+                                $aaron_transaction = -$owed_amount;
                             }
                         } else {
                             if ($charge['payer'] == 'Aaron' && $charge['paid_for'] == 'Riley') {
-                                $aaron_balance += $charge['amount'];
-                                $riley_balance -= $charge['amount'];
+                                $aaron_transaction = $charge['amount'];
+                                $riley_transaction = -$charge['amount'];
                             } elseif ($charge['payer'] == 'Riley' && $charge['paid_for'] == 'Aaron') {
-                                $riley_balance += $charge['amount'];
-                                $aaron_balance -= $charge['amount'];
+                                $riley_transaction = $charge['amount'];
+                                $aaron_transaction = -$charge['amount'];
                             }
                         }
                     }
+                    $aaron_balance += $aaron_transaction;
+                    $riley_balance += $riley_transaction;
                 ?>
                     <tr>
                         <td><?php echo date('Y-m-d', strtotime($charge['charge_date'])); ?></td>
                         <td><?php echo htmlspecialchars($charge['description']); ?> (Paid by <?php echo $charge['payer']; ?> for <?php echo $charge['paid_for']; ?>)</td>
-                        <td class="<?php echo ($charge['payer'] == 'Aaron') ? 'green' : 'red'; ?>">
-                            <?php
-                            if ($charge['paid_for'] == 'Aaron' || $charge['paid_for'] == 'Both') {
-                                if ($charge['payer'] == 'Aaron') {
-                                    echo '$' . number_format($charge['amount'] * (1 - $charge['percentage'] / 100), 2);
-                                } else {
-                                    echo '-$' . number_format($charge['amount'] * ($charge['percentage'] / 100), 2);
-                                }
-                            }
-                            ?>
+                        <td class="<?php echo ($aaron_transaction >= 0) ? 'green' : 'red'; ?>">
+                            $<?php echo number_format($aaron_transaction, 2); ?>
                         </td>
-                        <td class="<?php echo ($charge['payer'] == 'Riley') ? 'green' : 'red'; ?>">
-                            <?php
-                            if ($charge['paid_for'] == 'Riley' || $charge['paid_for'] == 'Both') {
-                                if ($charge['payer'] == 'Riley') {
-                                    echo '$' . number_format($charge['amount'] * (1 - $charge['percentage'] / 100), 2);
-                                } else {
-                                    echo '-$' . number_format($charge['amount'] * ($charge['percentage'] / 100), 2);
-                                }
-                            }
-                            ?>
+                        <td class="<?php echo ($riley_transaction >= 0) ? 'green' : 'red'; ?>">
+                            $<?php echo number_format($riley_transaction, 2); ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

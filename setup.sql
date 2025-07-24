@@ -5,6 +5,7 @@ CREATE TABLE charges (
     amount DECIMAL(10, 2) NOT NULL,
     description VARCHAR(255) NOT NULL,
     percentage DECIMAL(5, 2) NOT NULL DEFAULT 50.00,
+    pay_down_balance BOOLEAN NOT NULL DEFAULT 0,
     charge_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     settled BOOLEAN NOT NULL DEFAULT 0
 );

@@ -10,18 +10,26 @@ $riley_balance = 0;
 
 foreach ($charges as $charge) {
     if ($charge['settled'] == 0) {
-        if ($charge['paid_for'] == 'Both') {
-            $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
+        if ($charge['pay_down_balance']) {
             if ($charge['payer'] == 'Aaron') {
-                $riley_balance -= $owed_amount;
+                $aaron_balance += $charge['amount'];
             } else {
-                $aaron_balance -= $owed_amount;
+                $riley_balance += $charge['amount'];
             }
         } else {
-            if ($charge['payer'] == 'Aaron' && $charge['paid_for'] == 'Riley') {
-                $riley_balance -= $charge['amount'];
-            } elseif ($charge['payer'] == 'Riley' && $charge['paid_for'] == 'Aaron') {
-                $aaron_balance -= $charge['amount'];
+            if ($charge['paid_for'] == 'Both') {
+                $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
+                if ($charge['payer'] == 'Aaron') {
+                    $riley_balance -= $owed_amount;
+                } else {
+                    $aaron_balance -= $owed_amount;
+                }
+            } else {
+                if ($charge['payer'] == 'Aaron' && $charge['paid_for'] == 'Riley') {
+                    $riley_balance -= $charge['amount'];
+                } elseif ($charge['payer'] == 'Riley' && $charge['paid_for'] == 'Aaron') {
+                    $aaron_balance -= $charge['amount'];
+                }
             }
         }
     }
@@ -79,6 +87,8 @@ $total = $aaron_balance - $riley_balance;
                     <p>Owed: $<span id="owed-amount">0.00</span></p>
                     <label for="description">Description</label>
                     <input type="text" name="description" required>
+                    <label for="pay_down_balance">Pay Down Balance</label>
+                    <input type="checkbox" name="pay_down_balance" value="1">
                     <button type="submit">Add Charge</button>
                 </form>
             </div>
