@@ -5,14 +5,15 @@ $id = $_GET['id'];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $payer = $_POST['payer'];
+    $paid_for = $_POST['paid_for'];
     $amount = $_POST['amount'];
     $description = $_POST['description'];
     $percentage = $_POST['percentage'];
 
-    $sql = "UPDATE charges SET payer = ?, amount = ?, description = ?, percentage = ? WHERE id = ?";
+    $sql = "UPDATE charges SET payer = ?, paid_for = ?, amount = ?, description = ?, percentage = ? WHERE id = ?";
 
     if ($stmt = mysqli_prepare($link, $sql)) {
-        mysqli_stmt_bind_param($stmt, "sdsdi", $payer, $amount, $description, $percentage, $id);
+        mysqli_stmt_bind_param($stmt, "ssdsdi", $payer, $paid_for, $amount, $description, $percentage, $id);
 
         if (mysqli_stmt_execute($stmt)) {
             header("location: admin.php");
@@ -56,6 +57,12 @@ mysqli_close($link);
                     <select name="payer" required>
                         <option value="Aaron" <?php echo $charge['payer'] == 'Aaron' ? 'selected' : ''; ?>>Aaron</option>
                         <option value="Riley" <?php echo $charge['payer'] == 'Riley' ? 'selected' : ''; ?>>Riley</option>
+                    </select>
+                    <label for="paid_for">Paid for</label>
+                    <select name="paid_for" required>
+                        <option value="Both" <?php echo $charge['paid_for'] == 'Both' ? 'selected' : ''; ?>>Both</option>
+                        <option value="Aaron" <?php echo $charge['paid_for'] == 'Aaron' ? 'selected' : ''; ?>>Aaron</option>
+                        <option value="Riley" <?php echo $charge['paid_for'] == 'Riley' ? 'selected' : ''; ?>>Riley</option>
                     </select>
                     <label for="amount">Amount</label>
                     <input type="number" name="amount" step="0.01" value="<?php echo $charge['amount']; ?>" required>

@@ -1,6 +1,7 @@
 CREATE TABLE charges (
     id INT AUTO_INCREMENT PRIMARY KEY,
     payer VARCHAR(255) NOT NULL,
+    paid_for VARCHAR(255) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     description VARCHAR(255) NOT NULL,
     percentage DECIMAL(5, 2) NOT NULL DEFAULT 50.00,

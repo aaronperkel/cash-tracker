@@ -5,23 +5,31 @@ DB_PASS="A<_QNc.Hd[.W!IFS3[,t"
 DB_NAME="APERKEL_cashtrack"
 DB_HOST="webdb.uvm.edu"
 
-QUERY="SELECT payer, amount, percentage FROM charges WHERE settled = 0"
+QUERY="SELECT payer, paid_for, amount, percentage FROM charges WHERE settled = 0"
 
 RESULT=$(mysql -h $DB_HOST -u $DB_USER -p$DB_PASS $DB_NAME -e "$QUERY" -s)
 
-aaron_owes=0
-riley_owes=0
+aaron_balance=0
+riley_balance=0
 
-while read -r payer amount percentage; do
-    owed_amount=$(echo "$amount * ($percentage / 100)" | bc -l)
-    if [ "$payer" == "Aaron" ]; then
-        riley_owes=$(echo "$riley_owes + $owed_amount" | bc -l)
+while read -r payer paid_for amount percentage; do
+    if [ "$paid_for" == "Both" ]; then
+        owed_amount=$(echo "$amount * ($percentage / 100)" | bc -l)
+        if [ "$payer" == "Aaron" ]; then
+            riley_balance=$(echo "$riley_balance - $owed_amount" | bc -l)
+        else
+            aaron_balance=$(echo "$aaron_balance - $owed_amount" | bc -l)
+        fi
     else
-        aaron_owes=$(echo "$aaron_owes + $owed_amount" | bc -l)
+        if [ "$payer" == "Aaron" ] && [ "$paid_for" == "Riley" ]; then
+            riley_balance=$(echo "$riley_balance - $amount" | bc -l)
+        elif [ "$payer" == "Riley" ] && [ "$paid_for" == "Aaron" ]; then
+            aaron_balance=$(echo "$aaron_balance - $amount" | bc -l)
+        fi
     fi
 done <<< "$RESULT"
 
-total=$(echo "$riley_owes - $aaron_owes" | bc -l)
+total=$(echo "$aaron_balance - $riley_balance" | bc -l)
 
 if (( $(echo "$total > 0" | bc -l) )); then
     message="Riley owes Aaron \$$(printf "%.2f" $total)"

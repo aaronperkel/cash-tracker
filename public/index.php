@@ -5,22 +5,29 @@ $sql = "SELECT * FROM charges ORDER BY charge_date DESC";
 $result = mysqli_query($link, $sql);
 $charges = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$total = 0;
-$aaron_owes = 0;
-$riley_owes = 0;
+$aaron_balance = 0;
+$riley_balance = 0;
 
 foreach ($charges as $charge) {
     if ($charge['settled'] == 0) {
-        $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
-        if ($charge['payer'] == 'Aaron') {
-            $riley_owes += $owed_amount;
+        if ($charge['paid_for'] == 'Both') {
+            $owed_amount = $charge['amount'] * ($charge['percentage'] / 100);
+            if ($charge['payer'] == 'Aaron') {
+                $riley_balance -= $owed_amount;
+            } else {
+                $aaron_balance -= $owed_amount;
+            }
         } else {
-            $aaron_owes += $owed_amount;
+            if ($charge['payer'] == 'Aaron' && $charge['paid_for'] == 'Riley') {
+                $riley_balance -= $charge['amount'];
+            } elseif ($charge['payer'] == 'Riley' && $charge['paid_for'] == 'Aaron') {
+                $aaron_balance -= $charge['amount'];
+            }
         }
     }
 }
 
-$total = $riley_owes - $aaron_owes;
+$total = $aaron_balance - $riley_balance;
 ?>
 
 <!DOCTYPE html>
@@ -54,8 +61,14 @@ $total = $riley_owes - $aaron_owes;
         <div class="charges">
             <div class="charge-form">
                 <form action="add_charge.php" method="post">
-                    <label for="payer">Who paid?</label>
+                    <label for="payer">Paid by</label>
                     <select name="payer" id="payer" required>
+                        <option value="Aaron">Aaron</option>
+                        <option value="Riley">Riley</option>
+                    </select>
+                    <label for="paid_for">Paid for</label>
+                    <select name="paid_for" id="paid_for" required>
+                        <option value="Both">Both</option>
                         <option value="Aaron">Aaron</option>
                         <option value="Riley">Riley</option>
                     </select>
