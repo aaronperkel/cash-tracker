@@ -1,7 +1,7 @@
 <?php
 require_once '../config.php';
 
-$sql = "UPDATE charges SET settled = 1 WHERE settled = 0";
+$sql = "UPDATE transactions SET settled = 1 WHERE settled = 0";
 
 if (mysqli_query($link, $sql)) {
     header("location: index.php");
