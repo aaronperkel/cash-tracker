@@ -5,22 +5,41 @@ $sql = "SELECT * FROM transactions ORDER BY transaction_date DESC";
 $result = mysqli_query($link, $sql);
 $transactions = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-$aaron_balance = 0;
-$riley_balance = 0;
+$balance = 0;
 
 foreach ($transactions as $transaction) {
     if ($transaction['settled'] == 0) {
         if ($transaction['from_person'] == 'Aaron') {
-            $aaron_balance -= $transaction['amount'];
-            $riley_balance += $transaction['amount'];
+            $balance -= $transaction['amount'];
         } else {
-            $riley_balance -= $transaction['amount'];
-            $aaron_balance += $transaction['amount'];
+            $balance += $transaction['amount'];
         }
     }
 }
+?>
 
-$total = $riley_balance - $aaron_balance;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        <h1>Expense Tracker</h1>
+    </header>
+
+    <div class="container">
+        <div class="balance">
+            <?php if ($balance > 0): ?>
+                <h2>Aaron owes Riley $<?php echo number_format(abs($balance), 2); ?></h2>
+            <?php elseif ($balance < 0): ?>
+                <h2>Riley owes Aaron $<?php echo number_format(abs($balance), 2); ?></h2>
+            <?php else: ?>
+                <h2>All settled up!</h2>
+            <?php endif; ?>
+        </div>
 ?>
 
 <!DOCTYPE html>

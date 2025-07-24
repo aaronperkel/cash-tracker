@@ -8,11 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
 
     if ($type == 'split') {
-        $from_person = ($payer == 'Aaron') ? 'Riley' : 'Aaron';
-        $to_person = $payer;
+        $from_person = ($payer == 'Aaron') ? 'Aaron' : 'Riley';
+        $to_person = ($payer == 'Aaron') ? 'Riley' : 'Aaron';
         $transaction_amount = $amount / 2;
     } else {
-        $from_person = ($payer == 'Aaron') ? 'Aaron' : 'Riley';
+        $from_person = $payer;
         $to_person = ($payer == 'Aaron') ? 'Riley' : 'Aaron';
         $transaction_amount = $amount;
     }
